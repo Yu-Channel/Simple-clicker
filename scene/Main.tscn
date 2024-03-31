@@ -1,18 +1,24 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://icon.png" type="Texture" id=1]
 [ext_resource path="res://rounded-mplus-1m-medium.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://scripts/Main.gd" type="Script" id=3]
 [ext_resource path="res://scene/Enemy.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scripts/Test_label.gd" type="Script" id=5]
 
 [sub_resource type="DynamicFont" id=1]
 size = 25
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 52
 font_data = ExtResource( 2 )
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 3 )
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
+visible = false
 margin_right = 174.0
 margin_bottom = 123.0
 __meta__ = {
@@ -42,3 +48,14 @@ valign = 1
 
 [node name="Enemy" parent="." instance=ExtResource( 4 )]
 position = Vector2( 290, 115 )
+
+[node name="Test_label" type="Label" parent="."]
+margin_left = 79.0
+margin_top = 81.0
+margin_right = 119.0
+margin_bottom = 154.0
+custom_fonts/font = SubResource( 2 )
+text = "0"
+script = ExtResource( 5 )
+
+[connection signal="input_event" from="Enemy" to="Test_label" method="_on_Enemy_input_event"]
