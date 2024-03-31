@@ -25,8 +25,8 @@ var ascendant_max_floor		# 最大到達階層
 
 ## 敵のステータス
 var enemy_type				# 敵の種類(0=通常/1=ボス)
-var enemy_id				# 敵のグラフィックID
-var enemy_max_hp			# 敵のHPの最大値
-var enemy_hp				# 敵のHPの現在値
+var enemy_id:int = 0				# 敵のグラフィックID
+var enemy_max_hp:float = 0			# 敵のHPの最大値
+var enemy_hp:float = 0				# 敵のHPの現在値
 
 
