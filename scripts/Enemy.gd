@@ -2,12 +2,13 @@ extends Area2D
 
 
 func _ready():
-	pass # Replace with function body.
-
+	Grobal.enemy_max_hp = 10
+	
 
 func _on_Enemy_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton:
 		if event.is_pressed():
-			print("clickしたよ！") # チェック用
+			Grobal.enemy_max_hp -= 1
+			print(str(Grobal.enemy_max_hp)) # チェック用
 #			queue_free()
 			

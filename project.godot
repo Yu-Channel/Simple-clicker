@@ -14,6 +14,10 @@ config/name="SimpleClicker"
 run/main_scene="res://scene/Main.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+Grobal="*res://scripts/Grobal.gd"
+
 [display]
 
 window/size/width=400

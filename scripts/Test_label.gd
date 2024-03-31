@@ -1,10 +1,5 @@
 extends Label
 
-var click_count = 0
+func _process(delta):
+	text = str(Grobal.enemy_max_hp)
 
-func _on_Enemy_input_event(viewport, event, shape_idx):
-	if event is InputEventMouseButton:
-		if event.is_pressed():
-			print("click event")
-			click_count += 1
-			text = str(click_count)
