@@ -46,10 +46,10 @@ align = 1
 valign = 1
 
 [node name="Test_label" type="Label" parent="."]
-margin_left = 22.0
-margin_top = 309.0
-margin_right = 62.0
-margin_bottom = 382.0
+margin_left = 16.0
+margin_top = 305.0
+margin_right = 56.0
+margin_bottom = 378.0
 custom_fonts/font = SubResource( 2 )
 text = "0"
 script = ExtResource( 5 )
