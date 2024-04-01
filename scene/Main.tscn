@@ -10,7 +10,7 @@ size = 25
 font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=2]
-size = 52
+size = 20
 font_data = ExtResource( 2 )
 
 [node name="Main" type="Node2D"]
