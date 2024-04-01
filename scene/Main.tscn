@@ -17,7 +17,6 @@ font_data = ExtResource( 2 )
 script = ExtResource( 3 )
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
-visible = false
 margin_right = 174.0
 margin_bottom = 123.0
 __meta__ = {
@@ -47,9 +46,9 @@ valign = 1
 
 [node name="Test_label" type="Label" parent="."]
 margin_left = 16.0
-margin_top = 305.0
+margin_top = 205.0
 margin_right = 56.0
-margin_bottom = 378.0
+margin_bottom = 278.0
 custom_fonts/font = SubResource( 2 )
 text = "0"
 script = ExtResource( 5 )

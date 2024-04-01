@@ -8,6 +8,7 @@ const AUTO_CLICK_POWER_INIT = 1	# オートの初期攻撃力
 
 # グローバル変数
 ## ゲーム
+var money:int = 0				# お金
 var floor_num:int = 1				# 階層
 var time_limit:float = LIMIT_TIMER_NUM				# 制限時間(ボスのみ)
 var loop_flag				# 雑魚ループフラグ

@@ -20,8 +20,11 @@ func call_enemy():
 
 ## 敵を倒したときの処理
 func _on_Enemy_tree_exited():
+	# 敵が再表示されるまでの時間
 	enemy_cooldown.start(0.6)
-	Grobal.floor_num += 1
+	# ボスで時間切れの場合は階層を進めない
+	if Grobal.enemy_hp <= 0:
+		Grobal.floor_num += 1
 
 func _on_EnemyCooldown_timeout():
 	call_enemy()
