@@ -13,5 +13,7 @@ func _on_Enemy_input_event(viewport, event, shape_idx):
 			print(str(Grobal.enemy_hp)) # チェック用
 			
 			if Grobal.enemy_hp <= 0:
+				
 				queue_free()
 			
+
