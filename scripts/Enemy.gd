@@ -10,6 +10,8 @@ func _ready():
 	set_enemy_hp()
 
 func _process(delta):
+	enemy_slayed()
+	# 時間制限
 	if !(Grobal.floor_num % 10):
 		Grobal.time_limit -= delta
 		if Grobal.time_limit <= 0:
@@ -20,18 +22,21 @@ func _process(delta):
 func _on_Enemy_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton:
 		if event.is_pressed():
-			Grobal.enemy_hp -= 1
+			Grobal.enemy_hp -= Grobal.click_power
 			
 			# 敵を倒したときの処理
-			if Grobal.enemy_hp <= 0:
-				Grobal.enemy_hp = 0
-				loot_money()
-				queue_free()
+			enemy_slayed()
+
+func enemy_slayed():
+	if Grobal.enemy_hp <= 0:
+		Grobal.enemy_hp = 0
+		loot_money()
+		queue_free()
 
 # 敵のHPを階層によって変化させる
 func set_enemy_hp():
 	var enemy_hp:float = 0
-	enemy_hp = int(10 * (1 + (Grobal.floor_num - 1) * 0.2))
+	enemy_hp = int(10 * (1 + pow(Grobal.floor_num, 1.18) - 1) * 0.2)
 	
 	# 10の倍数floorごとに
 	if !(Grobal.floor_num % 10):
@@ -46,6 +51,6 @@ func set_enemy_hp():
 # 敵を倒した時に得られるお金
 func loot_money():
 	var money:float = 0
-	money = 10 * (1 + pow(Grobal.floor_num, 2) * 0.2)
+	money = 10 * (1 + pow(Grobal.floor_num, 1.12) * 0.2)
 	Grobal.money += int(money)
 

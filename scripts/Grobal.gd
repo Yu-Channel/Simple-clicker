@@ -14,10 +14,10 @@ var time_limit:float = LIMIT_TIMER_NUM				# 制限時間(ボスのみ)
 var loop_flag				# 雑魚ループフラグ
 
 ## プレイヤーのステータス
-var click_power				# クリック攻撃力
+var click_power:int = CLICK_POWER_INIT				# クリック攻撃力
 var click_multiplier		# クリック倍率 *実装は未定
 var auto_click_power		# オートクリック攻撃力
-var auto_click_multiplier	# オートクリック倍率
+var auto_click_multiplier	# オートクリック倍率 *実装は未定
 var auto_click_cooldown		# オートクリック速度
 
 ## 転生関連
