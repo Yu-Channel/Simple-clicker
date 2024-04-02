@@ -2,9 +2,11 @@ extends Area2D
 
 
 func _ready():
+	# もし階層が0以下なら1に修正
 	if Grobal.floor_num < 1:
 		Grobal.floor_num = 1
 	
+	# 最初の敵を配置する
 	set_enemy_hp()
 
 func _process(delta):
@@ -22,6 +24,7 @@ func _on_Enemy_input_event(viewport, event, shape_idx):
 			
 			# 敵を倒したときの処理
 			if Grobal.enemy_hp <= 0:
+				Grobal.enemy_hp = 0
 				loot_money()
 				queue_free()
 
