@@ -5,11 +5,14 @@ onready var hp_label = $GUI/EnemyHP/HpNumLabel
 onready var hp_bar = $GUI/EnemyHP/HpBar
 onready var hp_bar_stylebox = $GUI/EnemyHP/HpBar.get("custom_styles/fg")
 onready var power_button = $GUI/ButtonUI/VBox/PowerButton
-onready var power_button_label = $GUI/ButtonUI/VBox/PowerButton/PowerButtonLabel
+onready var power_button_label = $GUI/ButtonUI/VBox/PowerButtonLabel
+onready var auto_power_button = $GUI/ButtonUI/VBox/AutoPowerButton
+onready var auto_power_button_label = $GUI/ButtonUI/VBox/AutoPowerButtonLabel
 
 var enemy_node
 var enemy_timer_node
 var click_power_price:float
+var auto_click_power_price:float
 var frame60:float
 
 func _ready():
@@ -33,8 +36,9 @@ func _process(delta):
 	# お買い物の自動更新
 	shop_price()
 	
+	# オートクリックの判定
 	if !(frame60) && (Grobal.enemy_hp > 0):
-		Grobal.enemy_hp -= 1
+		Grobal.enemy_hp -= Grobal.auto_click_power
 
 # 敵の呼び出し 座標の設定===============
 func call_enemy():
@@ -66,10 +70,26 @@ func _on_PowerButton_pressed():
 		Grobal.money -= click_power_price
 		# プレイヤーの強化
 		Grobal.click_power += 1
-	
+
+func _on_AutoPowerButton_pressed():
+	# お金が足りてるかどうか
+	shop_price()
+	if auto_click_power_price <= Grobal.money:
+		# お金の消費
+		Grobal.money -= auto_click_power_price
+		# プレイヤーの強化
+		Grobal.auto_click_power += 1
+
 # 各お買い物の計算と表示の更新
-func shop_price():	
+func shop_price():
+	# 各種お値段の計算
 	click_power_price = int(100 * (pow(Grobal.click_power, 1.32)))
+	auto_click_power_price = int(500 * (pow(1 + Grobal.auto_click_power, 1.48)))
+	
 	# ボタンとラベルの表示の変更
 	power_button.text = "Power +" + str(1) + "(" + str(Grobal.click_power) + ")"
 	power_button_label.text = "Money x" + str(click_power_price)
+	auto_power_button.text = "AutoPower +" + str(1) + "(" + str(Grobal.auto_click_power) + ")"
+	auto_power_button_label.text = "Money x" + str(auto_click_power_price)
+
+

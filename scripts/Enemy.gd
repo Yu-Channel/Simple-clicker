@@ -51,6 +51,6 @@ func set_enemy_hp():
 # 敵を倒した時に得られるお金
 func loot_money():
 	var money:float = 0
-	money = 10 * (1 + pow(Grobal.floor_num, 1.12) * 0.2)
+	money = 10 * (1 + pow(Grobal.floor_num, 1.28) * 0.2 * Grobal.floor_num)
 	Grobal.money += int(money)
 

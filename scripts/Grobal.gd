@@ -4,7 +4,7 @@ extends Node
 # 定数
 const LIMIT_TIMER_NUM = 30	# 制限時間(s)
 const CLICK_POWER_INIT = 1	# クリックの初期攻撃力
-const AUTO_CLICK_POWER_INIT = 1	# オートの初期攻撃力
+const AUTO_CLICK_POWER_INIT = 0	# オートの初期攻撃力
 
 # グローバル変数
 ## ゲーム
@@ -16,7 +16,7 @@ var loop_flag				# 雑魚ループフラグ
 ## プレイヤーのステータス
 var click_power:int = CLICK_POWER_INIT				# クリック攻撃力
 var click_multiplier		# クリック倍率 *実装は未定
-var auto_click_power		# オートクリック攻撃力
+var auto_click_power:int = AUTO_CLICK_POWER_INIT		# オートクリック攻撃力
 var auto_click_multiplier	# オートクリック倍率 *実装は未定
 var auto_click_cooldown		# オートクリック速度
 

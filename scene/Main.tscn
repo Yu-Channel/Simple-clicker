@@ -87,28 +87,47 @@ align = 1
 valign = 1
 
 [node name="ButtonUI" type="PanelContainer" parent="GUI"]
-margin_right = 131.0
-margin_bottom = 139.0
+margin_left = 1.0
+margin_top = 4.0
+margin_right = 127.0
+margin_bottom = 114.0
 __meta__ = {
+"_edit_group_": true,
 "_editor_description_": "button用のノード"
 }
 
 [node name="VBox" type="VBoxContainer" parent="GUI/ButtonUI"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 124.0
-margin_bottom = 132.0
+margin_right = 119.0
+margin_bottom = 103.0
 
 [node name="PowerButton" type="Button" parent="GUI/ButtonUI/VBox"]
-margin_right = 117.0
+margin_right = 112.0
 margin_bottom = 25.0
 custom_fonts/font = SubResource( 5 )
-text = "Power +1(x)"
+text = "Power(x)"
 
-[node name="PowerButtonLabel" type="Label" parent="GUI/ButtonUI/VBox/PowerButton"]
+[node name="PowerButtonLabel" type="Label" parent="GUI/ButtonUI/VBox"]
 margin_top = 29.0
-margin_right = 117.0
+margin_right = 112.0
 margin_bottom = 46.0
+custom_fonts/font = SubResource( 1 )
+text = "Money x100"
+align = 1
+valign = 1
+
+[node name="AutoPowerButton" type="Button" parent="GUI/ButtonUI/VBox"]
+margin_top = 50.0
+margin_right = 112.0
+margin_bottom = 75.0
+custom_fonts/font = SubResource( 5 )
+text = "AutoPower(x)"
+
+[node name="AutoPowerButtonLabel" type="Label" parent="GUI/ButtonUI/VBox"]
+margin_top = 79.0
+margin_right = 112.0
+margin_bottom = 96.0
 custom_fonts/font = SubResource( 1 )
 text = "Money x100"
 align = 1
@@ -139,3 +158,4 @@ __meta__ = {
 }
 
 [connection signal="pressed" from="GUI/ButtonUI/VBox/PowerButton" to="." method="_on_PowerButton_pressed"]
+[connection signal="pressed" from="GUI/ButtonUI/VBox/AutoPowerButton" to="." method="_on_AutoPowerButton_pressed"]
