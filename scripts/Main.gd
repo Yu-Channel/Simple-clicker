@@ -23,7 +23,7 @@ func _ready():
 	call_enemy()
 
 # フレームごとの処理===================
-func _process(delta):
+func _process(_delta):
 	# フレームの計測(60fps)
 	frame60 += 1
 	if frame60 >= 60:
@@ -67,7 +67,7 @@ func _on_PowerButton_pressed():
 	shop_price()
 	if click_power_price <= Grobal.money:
 		# お金の消費
-		Grobal.money -= click_power_price
+		Grobal.money -= int(click_power_price)
 		# プレイヤーの強化
 		Grobal.click_power += 1
 
@@ -76,7 +76,7 @@ func _on_AutoPowerButton_pressed():
 	shop_price()
 	if auto_click_power_price <= Grobal.money:
 		# お金の消費
-		Grobal.money -= auto_click_power_price
+		Grobal.money -= int(auto_click_power_price)
 		# プレイヤーの強化
 		Grobal.auto_click_power += 1
 

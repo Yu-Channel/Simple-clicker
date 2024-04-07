@@ -87,10 +87,10 @@ align = 1
 valign = 1
 
 [node name="ButtonUI" type="PanelContainer" parent="GUI"]
-margin_left = 1.0
-margin_top = 4.0
-margin_right = 127.0
-margin_bottom = 114.0
+margin_left = 17.0
+margin_top = 289.0
+margin_right = 388.0
+margin_bottom = 399.0
 __meta__ = {
 "_edit_group_": true,
 "_editor_description_": "button用のノード"
@@ -99,18 +99,18 @@ __meta__ = {
 [node name="VBox" type="VBoxContainer" parent="GUI/ButtonUI"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 119.0
+margin_right = 364.0
 margin_bottom = 103.0
 
 [node name="PowerButton" type="Button" parent="GUI/ButtonUI/VBox"]
-margin_right = 112.0
+margin_right = 357.0
 margin_bottom = 25.0
 custom_fonts/font = SubResource( 5 )
 text = "Power(x)"
 
 [node name="PowerButtonLabel" type="Label" parent="GUI/ButtonUI/VBox"]
 margin_top = 29.0
-margin_right = 112.0
+margin_right = 357.0
 margin_bottom = 46.0
 custom_fonts/font = SubResource( 1 )
 text = "Money x100"
@@ -119,14 +119,14 @@ valign = 1
 
 [node name="AutoPowerButton" type="Button" parent="GUI/ButtonUI/VBox"]
 margin_top = 50.0
-margin_right = 112.0
+margin_right = 357.0
 margin_bottom = 75.0
 custom_fonts/font = SubResource( 5 )
 text = "AutoPower(x)"
 
 [node name="AutoPowerButtonLabel" type="Label" parent="GUI/ButtonUI/VBox"]
 margin_top = 79.0
-margin_right = 112.0
+margin_right = 357.0
 margin_bottom = 96.0
 custom_fonts/font = SubResource( 1 )
 text = "Money x100"
@@ -145,6 +145,7 @@ script = ExtResource( 5 )
 [node name="EnemyCooldown" type="Timer" parent="."]
 process_mode = 0
 one_shot = true
+autostart = true
 
 [node name="Dummy_enemy" type="ColorRect" parent="."]
 visible = false

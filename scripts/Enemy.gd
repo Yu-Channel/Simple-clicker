@@ -19,7 +19,7 @@ func _process(delta):
 			queue_free()
 
 # クリックしたときの処理
-func _on_Enemy_input_event(viewport, event, shape_idx):
+func _on_Enemy_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton:
 		if event.is_pressed():
 			Grobal.enemy_hp -= Grobal.click_power
@@ -40,7 +40,7 @@ func set_enemy_hp():
 	
 	# 10の倍数floorごとに
 	if !(Grobal.floor_num % 10):
-		enemy_hp *= 1 + (pow(Grobal.floor_num / 10, 2) * 0.1)
+		enemy_hp *= 1 + (pow(float(Grobal.floor_num) / 10, 2) * 0.1)
 		Grobal.time_limit = Grobal.LIMIT_TIMER_NUM
 	
 	# 最大HPを代入 (intで少数点以下を切る)
