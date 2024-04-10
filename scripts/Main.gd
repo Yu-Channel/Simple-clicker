@@ -44,6 +44,7 @@ func _process(_delta):
 func call_enemy():
 	enemy_node = load("res://scene/Enemy.tscn").instance()
 	enemy_node.connect("tree_exited", self, "_on_Enemy_tree_exited")
+	enemy_node.connect("input_event", self, "_on_Enemy_input_event")
 	add_child(enemy_node)
 	enemy_node.position.x = 260
 	enemy_node.position.y = 160
@@ -58,6 +59,20 @@ func _on_Enemy_tree_exited():
 
 func _on_EnemyCooldown_timeout():
 	call_enemy()
+
+# 敵をクリックしたらパーティクルを生成
+func _on_Enemy_input_event(_viewport, event, _shape_idx):
+	if event is InputEventMouseButton:
+		if event.is_pressed():
+			var click_particles_node = load("res://scene/ClickParticles.tscn").instance()
+			click_particles_node.connect("tree_exited", self, "_on_ClickParticles_tree_exited")
+			
+			# マウスカーソルの座標を取得
+			var mouse_position:Vector2 = get_viewport().get_mouse_position()
+			click_particles_node.position = mouse_position
+			
+			add_child(click_particles_node)
+			
 
 # ====================================
 
