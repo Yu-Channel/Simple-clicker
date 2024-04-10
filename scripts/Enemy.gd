@@ -1,5 +1,7 @@
 extends Area2D
 
+var enemy_sprite_texture = load("res://sprite/monster01.png")
+
 onready var enemy_sprite = $Sprite
 
 var enemy_shake_time:float = 0
@@ -47,6 +49,8 @@ func enemy_slayed():
 func set_enemy_hp():
 	var enemy_hp:float = 0
 	enemy_hp = int(10 * (1 + pow(Grobal.floor_num, 1.18) - 1) * 0.2)
+	
+	enemy_sprite.texture = enemy_sprite_texture
 	
 	# 10の倍数floorごとに
 	if !(Grobal.floor_num % 10):
