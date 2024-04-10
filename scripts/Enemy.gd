@@ -1,5 +1,9 @@
 extends Area2D
 
+onready var enemy_sprite = $Sprite
+
+var enemy_shake_time:float = 0
+
 func _ready():
 	# もし階層が0以下なら1に修正
 	if Grobal.floor_num < 1:
@@ -16,12 +20,19 @@ func _process(delta):
 		if Grobal.time_limit <= 0:
 			loot_money()
 			queue_free()
+	
+	if enemy_shake_time > 0:
+		enemy_shake_time -= 1
+		enemy_sprite.position.x = 0.5 * rand_range(-1, 1) * enemy_shake_time
+		enemy_sprite.position.y = 0.5 * rand_range(-1, 1) * enemy_shake_time
 
 # クリックしたときの処理
 func _on_Enemy_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton:
 		if event.is_pressed():
 			Grobal.enemy_hp -= Grobal.click_power
+			
+			enemy_shake_time = 30
 			
 			# 敵を倒したときの処理
 			enemy_slayed()
