@@ -63,24 +63,23 @@ margin_right = 400.0
 margin_bottom = 400.0
 mouse_filter = 2
 __meta__ = {
-"_edit_group_": true,
 "_edit_lock_": true
 }
 
 [node name="HpBar" type="ProgressBar" parent="GUI/EnemyHP"]
 margin_left = 135.0
-margin_top = 39.0
+margin_top = 1.0
 margin_right = 385.0
-margin_bottom = 74.0
+margin_bottom = 36.0
 custom_styles/fg = SubResource( 4 )
 value = 50.0
 percent_visible = false
 
 [node name="HpNumLabel" type="Label" parent="GUI/EnemyHP"]
-margin_left = 232.0
-margin_top = 39.0
-margin_right = 292.0
-margin_bottom = 75.0
+margin_left = 231.0
+margin_top = 3.0
+margin_right = 291.0
+margin_bottom = 39.0
 custom_fonts/font = SubResource( 3 )
 text = "00/00"
 align = 1
@@ -134,10 +133,10 @@ align = 1
 valign = 1
 
 [node name="Test_label" type="Label" parent="."]
-margin_left = 16.0
-margin_top = 205.0
-margin_right = 56.0
-margin_bottom = 278.0
+margin_left = 18.0
+margin_top = 43.0
+margin_right = 108.0
+margin_bottom = 116.0
 custom_fonts/font = SubResource( 2 )
 text = "debug log"
 script = ExtResource( 5 )
@@ -145,7 +144,6 @@ script = ExtResource( 5 )
 [node name="EnemyCooldown" type="Timer" parent="."]
 process_mode = 0
 one_shot = true
-autostart = true
 
 [node name="Dummy_enemy" type="ColorRect" parent="."]
 visible = false

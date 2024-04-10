@@ -46,7 +46,7 @@ func call_enemy():
 	enemy_node.connect("tree_exited", self, "_on_Enemy_tree_exited")
 	add_child(enemy_node)
 	enemy_node.position.x = 260
-	enemy_node.position.y = 200
+	enemy_node.position.y = 160
 
 ## 敵を倒したときの処理
 func _on_Enemy_tree_exited():
