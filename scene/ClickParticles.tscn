@@ -39,7 +39,7 @@ linear_accel_curve = SubResource( 5 )
 damping_curve = SubResource( 3 )
 scale = 8.0
 scale_curve = SubResource( 7 )
-color = Color( 0, 1, 0.0705882, 1 )
+color = Color( 0.921569, 1, 0, 1 )
 
 [node name="ClickParticles" type="Particles2D"]
 emitting = false
