@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://rounded-mplus-1m-medium.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://scripts/Main.gd" type="Script" id=3]
@@ -38,6 +38,18 @@ font_data = ExtResource( 2 )
 size = 20
 font_data = ExtResource( 2 )
 
+[sub_resource type="StyleBoxFlat" id=6]
+bg_color = Color( 0.105882, 0.909804, 0.929412, 1 )
+border_width_left = 1
+border_width_top = 2
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color( 0.8, 0.8, 0.8, 0 )
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
 [node name="Main" type="Node2D"]
 script = ExtResource( 3 )
 
@@ -49,7 +61,7 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="ColorRect" type="ColorRect" parent="GUI"]
+[node name="BackGround" type="ColorRect" parent="GUI"]
 margin_right = 400.0
 margin_bottom = 400.0
 mouse_filter = 2
@@ -136,11 +148,6 @@ text = "Money x100"
 align = 1
 valign = 1
 
-[node name="FloorLabel" type="Label" parent="GUI"]
-margin_right = 40.0
-margin_bottom = 14.0
-text = "0F"
-
 [node name="Test_label" type="Label" parent="."]
 margin_left = 18.0
 margin_top = 43.0
@@ -150,20 +157,37 @@ custom_fonts/font = SubResource( 2 )
 text = "debug log"
 script = ExtResource( 5 )
 
-[node name="EnemyCooldown" type="Timer" parent="."]
+[node name="Enemy" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+mouse_filter = 2
+
+[node name="EnemyCooldown" type="Timer" parent="Enemy"]
 process_mode = 0
 one_shot = true
 
-[node name="Dummy_enemy" type="ColorRect" parent="."]
+[node name="HUD" type="Control" parent="."]
+margin_right = 400.0
+margin_bottom = 400.0
+mouse_filter = 2
+
+[node name="TimerBar" type="ProgressBar" parent="HUD"]
 visible = false
-margin_left = 134.0
-margin_top = 74.0
-margin_right = 384.0
-margin_bottom = 324.0
-color = Color( 0, 1, 0, 1 )
+margin_left = 151.0
+margin_top = 243.0
+margin_right = 367.0
+margin_bottom = 257.0
+mouse_filter = 2
+custom_styles/fg = SubResource( 6 )
+value = 50.0
 __meta__ = {
 "_edit_lock_": true
 }
+
+[node name="FloorLabel" type="Label" parent="HUD"]
+margin_right = 40.0
+margin_bottom = 14.0
+text = "0F"
 
 [connection signal="pressed" from="GUI/ButtonUI/VBox/PowerButton" to="." method="_on_PowerButton_pressed"]
 [connection signal="pressed" from="GUI/ButtonUI/VBox/AutoPowerButton" to="." method="_on_AutoPowerButton_pressed"]

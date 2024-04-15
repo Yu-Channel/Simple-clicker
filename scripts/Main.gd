@@ -1,6 +1,7 @@
 extends Node2D
 
-onready var enemy_cooldown = $EnemyCooldown
+onready var enemy_node = $Enemy
+onready var enemy_cooldown = $Enemy/EnemyCooldown
 onready var hp_label = $GUI/EnemyHP/HpNumLabel
 onready var hp_bar = $GUI/EnemyHP/HpBar
 onready var hp_bar_stylebox = $GUI/EnemyHP/HpBar.get("custom_styles/fg")
@@ -8,10 +9,11 @@ onready var power_button = $GUI/ButtonUI/VBox/PowerButton
 onready var power_button_label = $GUI/ButtonUI/VBox/PowerButtonLabel
 onready var auto_power_button = $GUI/ButtonUI/VBox/AutoPowerButton
 onready var auto_power_button_label = $GUI/ButtonUI/VBox/AutoPowerButtonLabel
+onready var hud_timer_bar = $HUD/TimerBar
 
 enum ThousandsSparatorUnit { null, K, M, G, T, P, E, Z, Y, R, Q }
 
-var enemy_node
+var enemy_add_node
 var enemy_timer_node
 var click_power_price:float
 var auto_click_power_price:float
@@ -26,7 +28,7 @@ func _ready():
 
 # フレームごとの処理===================
 func _process(_delta):
-	Grobal.money += 10000000000 # debug
+#	Grobal.money += 10000000000 # debug
 	# フレームの計測(60fps)
 	frame60 += 1
 	if frame60 >= 60:
@@ -36,6 +38,10 @@ func _process(_delta):
 	hp_label.text = str(Grobal.enemy_hp) + "/" + str(Grobal.enemy_max_hp)
 	hp_bar.value = ( Grobal.enemy_hp / Grobal.enemy_max_hp ) * 100
 	hp_bar_stylebox.bg_color = Color(1.0,(hp_bar.value / 100) , 0, 1)
+	
+	# ボスタイマーの処理
+	hud_timer_bar.value = Grobal.time_limit / Grobal.LIMIT_TIMER_NUM * 100
+	
 	# お買い物の自動更新
 	shop_price()
 	
@@ -45,12 +51,19 @@ func _process(_delta):
 
 # 敵の呼び出し 座標の設定===============
 func call_enemy():
-	enemy_node = load("res://scene/Enemy.tscn").instance()
-	enemy_node.connect("tree_exited", self, "_on_Enemy_tree_exited")
-	enemy_node.connect("input_event", self, "_on_Enemy_input_event")
-	add_child(enemy_node)
-	enemy_node.position.x = 260
-	enemy_node.position.y = 160
+	enemy_add_node = load("res://scene/Enemy.tscn").instance()
+	enemy_add_node.connect("tree_exited", self, "_on_Enemy_tree_exited")
+	enemy_add_node.connect("input_event", self, "_on_Enemy_input_event")
+	
+	enemy_node.add_child(enemy_add_node)
+	enemy_add_node.position.x = 260
+	enemy_add_node.position.y = 160
+	
+	match Grobal.floor_num % 10:
+		0:
+			hud_timer_bar.show()
+		_:
+			hud_timer_bar.hide()
 
 ## 敵を倒したときの処理
 func _on_Enemy_tree_exited():
@@ -68,7 +81,7 @@ func _on_Enemy_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton:
 		if event.is_pressed():
 			var click_particles_node = load("res://scene/ClickParticles.tscn").instance()
-			click_particles_node.connect("tree_exited", self, "_on_ClickParticles_tree_exited")
+#			click_particles_node.connect("tree_exited", self, "_on_ClickParticles_tree_exited") # NotUsed 
 			
 			# マウスカーソルの座標を取得
 			var mouse_position:Vector2 = get_viewport().get_mouse_position()
@@ -109,7 +122,8 @@ func shop_price():
 	power_button_label.text = "Money x" + str(unit_conversion(click_power_price))
 	auto_power_button.text = "AutoPower +" + str(1) + "(" + str(Grobal.auto_click_power) + ")"
 	auto_power_button_label.text = "Money x" + str(unit_conversion(auto_click_power_price))
-	
+
+# 3桁カンマ区切りの関数
 func unit_conversion(_num):
 	var _i = _num
 	var digit:int = 0
