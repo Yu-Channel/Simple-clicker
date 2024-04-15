@@ -136,6 +136,11 @@ text = "Money x100"
 align = 1
 valign = 1
 
+[node name="FloorLabel" type="Label" parent="GUI"]
+margin_right = 40.0
+margin_bottom = 14.0
+text = "0F"
+
 [node name="Test_label" type="Label" parent="."]
 margin_left = 18.0
 margin_top = 43.0

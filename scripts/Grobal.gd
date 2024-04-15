@@ -6,6 +6,8 @@ const LIMIT_TIMER_NUM = 30	# 制限時間(s)
 const CLICK_POWER_INIT = 1	# クリックの初期攻撃力
 const AUTO_CLICK_POWER_INIT = 0	# オートの初期攻撃力
 
+var ThousandsSparatorUnit:Array = ["dummy", "K", "M", "G", "T", "P", "E", "Z", "Y", "R", "Q"]
+
 # グローバル変数
 ## ゲーム
 var money:int = 0				# お金

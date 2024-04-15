@@ -9,6 +9,8 @@ onready var power_button_label = $GUI/ButtonUI/VBox/PowerButtonLabel
 onready var auto_power_button = $GUI/ButtonUI/VBox/AutoPowerButton
 onready var auto_power_button_label = $GUI/ButtonUI/VBox/AutoPowerButtonLabel
 
+enum ThousandsSparatorUnit { null, K, M, G, T, P, E, Z, Y, R, Q }
+
 var enemy_node
 var enemy_timer_node
 var click_power_price:float
@@ -24,6 +26,7 @@ func _ready():
 
 # フレームごとの処理===================
 func _process(_delta):
+	Grobal.money += 10000000000 # debug
 	# フレームの計測(60fps)
 	frame60 += 1
 	if frame60 >= 60:
@@ -84,7 +87,7 @@ func _on_PowerButton_pressed():
 		# お金の消費
 		Grobal.money -= int(click_power_price)
 		# プレイヤーの強化
-		Grobal.click_power += 1
+		Grobal.click_power += 10000 # debug num
 
 func _on_AutoPowerButton_pressed():
 	# お金が足りてるかどうか
@@ -103,8 +106,45 @@ func shop_price():
 	
 	# ボタンとラベルの表示の変更
 	power_button.text = "Power +" + str(1) + "(" + str(Grobal.click_power) + ")"
-	power_button_label.text = "Money x" + str(click_power_price)
+	power_button_label.text = "Money x" + str(unit_conversion(click_power_price))
 	auto_power_button.text = "AutoPower +" + str(1) + "(" + str(Grobal.auto_click_power) + ")"
-	auto_power_button_label.text = "Money x" + str(auto_click_power_price)
-
+	auto_power_button_label.text = "Money x" + str(unit_conversion(auto_click_power_price))
+	
+func unit_conversion(_num):
+	var _i = _num
+	var digit:int = 0
+	var thousands_separator:float = 0
+	var num_conv = 0
+	var num_conv_str
+	var digit_v = 0
+	
+	# 数字が何桁(digit)あるか数える
+	while _i > 0.99:
+		_i /= 10
+		digit += 1
+		
+		print(str(digit_v)) # debug
+	
+	# 3桁カンマで何個あるかを調べる
+	thousands_separator = int(digit / 3) - 1
+	
+	# 10単位以上は存在しないため切り捨て(ゲーム的にも限界があるため)
+	if thousands_separator > 10:
+		thousands_separator = 10
+	
+	# 桁表示文字を加える(必要な場合)※10段階まで
+	if thousands_separator > 0:
+		# 切り捨てを行う
+		num_conv = _num / (1000 * thousands_separator)
+		
+		print(str(thousands_separator),"num_conv:", str(num_conv)) # debug
+		
+		if thousands_separator > 10:
+			thousands_separator = 10
+		
+		num_conv_str = str(num_conv) + Grobal.ThousandsSparatorUnit[thousands_separator]
+		return num_conv_str
+		
+	else:
+		return _num
 
