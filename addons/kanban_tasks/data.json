@@ -29,15 +29,16 @@
     {
       "title": "Todo",
       "tasks": [
-        0,
         1,
-        2
+        2,
+        0,
+        3
       ]
     },
     {
       "title": "Doing",
       "tasks": [
-
+        4
       ]
     },
     {
@@ -61,6 +62,16 @@
     {
       "category": 0,
       "title": "ファームモードを追加",
+      "details": ""
+    },
+    {
+      "category": 0,
+      "title": "3桁カンマ区切り(バグ修正)",
+      "details": ""
+    },
+    {
+      "category": 0,
+      "title": "タイマー(HUD)",
       "details": ""
     }
   ]
