@@ -13,7 +13,7 @@ var ThousandsSparatorUnit:Array = ["dummy", "K", "M", "G", "T", "P", "E", "Z", "
 var money:int = 0				# お金
 var floor_num:int = 1				# 階層
 var time_limit:float = LIMIT_TIMER_NUM				# 制限時間(ボスのみ)
-var loop_flag				# 雑魚ループフラグ
+var farm_mode_flag:int = 0				# 雑魚ループフラグ
 
 ## プレイヤーのステータス
 var click_power:int = CLICK_POWER_INIT				# クリック攻撃力

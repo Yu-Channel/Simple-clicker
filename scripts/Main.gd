@@ -10,6 +10,8 @@ onready var power_button_label = $GUI/ButtonUI/VBox/PowerButtonLabel
 onready var auto_power_button = $GUI/ButtonUI/VBox/AutoPowerButton
 onready var auto_power_button_label = $GUI/ButtonUI/VBox/AutoPowerButtonLabel
 onready var hud_timer_bar = $HUD/TimerBar
+onready var hud_iimer_label = $HUD/TimerBar/Label
+onready var farm_mode = $GUI/FarmModeCheckBox
 
 enum ThousandsSparatorUnit { null, K, M, G, T, P, E, Z, Y, R, Q }
 
@@ -28,7 +30,6 @@ func _ready():
 
 # フレームごとの処理===================
 func _process(_delta):
-#	Grobal.money += 10000000000 # debug
 	# フレームの計測(60fps)
 	frame60 += 1
 	if frame60 >= 60:
@@ -41,6 +42,7 @@ func _process(_delta):
 	
 	# ボスタイマーの処理
 	hud_timer_bar.value = Grobal.time_limit / Grobal.LIMIT_TIMER_NUM * 100
+	hud_iimer_label.text = "%.2fs" % [Grobal.time_limit]
 	
 	# お買い物の自動更新
 	shop_price()
@@ -69,9 +71,26 @@ func call_enemy():
 func _on_Enemy_tree_exited():
 	# 敵が再表示されるまでの時間
 	enemy_cooldown.start(0.6)
+	
+	if farm_mode.pressed == false:
+		Grobal.farm_mode_flag = 0
+	else:
+		Grobal.farm_mode_flag = 1
+	
 	# ボスで時間切れの場合は階層を進めない
-	if Grobal.enemy_hp <= 0:
-		Grobal.floor_num += 1
+	# もしファームモードがONならループ
+	if Grobal.farm_mode_flag != 0:
+		# ボス前フロアだった場合
+		if (Grobal.floor_num % 10 == 9):
+			pass
+		elif (Grobal.floor_num % 10 == 0 and Grobal.enemy_hp > 0):
+			Grobal.floor_num -= 1
+		else:
+			Grobal.floor_num += 1
+		
+	elif Grobal.enemy_hp <= 0:
+			Grobal.floor_num += 1
+		
 
 func _on_EnemyCooldown_timeout():
 	call_enemy()
@@ -79,7 +98,7 @@ func _on_EnemyCooldown_timeout():
 # 敵をクリックしたらパーティクルを生成
 func _on_Enemy_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton:
-		if event.is_pressed():
+		if event.is_action_pressed("action_mouse"):
 			var click_particles_node = load("res://scene/ClickParticles.tscn").instance()
 #			click_particles_node.connect("tree_exited", self, "_on_ClickParticles_tree_exited") # NotUsed 
 			
@@ -100,7 +119,7 @@ func _on_PowerButton_pressed():
 		# お金の消費
 		Grobal.money -= int(click_power_price)
 		# プレイヤーの強化
-		Grobal.click_power += 10000 # debug num
+		Grobal.click_power += 1
 
 func _on_AutoPowerButton_pressed():
 	# お金が足りてるかどうか
@@ -125,40 +144,39 @@ func shop_price():
 
 # 3桁カンマ区切りの関数
 func unit_conversion(_num):
-	var _i = _num
-	var digit:int = 0
-	var thousands_separator:float = 0
+	var digit:int = 0	# 桁数
+	var thousands_separator:float = 0	# 3桁区切りの回数
 	var num_conv = 0
 	var num_conv_str
 	var digit_v = 0
 	
 	# 数字が何桁(digit)あるか数える
+	var _i = _num
 	while _i > 0.99:
 		_i /= 10
 		digit += 1
-		
-		print(str(digit_v)) # debug
 	
 	# 3桁カンマで何個あるかを調べる
+	# 結果に -1 しているのは表示が小数点になってしまうため
 	thousands_separator = int(digit / 3) - 1
 	
-	# 10単位以上は存在しないため切り捨て(ゲーム的にも限界があるため)
+	# 10単位以上は単位自体が存在しないため切り捨て
+	# 単位は10種類["dummy", "K", "M", "G", "T", "P", "E", "Z", "Y", "R", "Q"]
 	if thousands_separator > 10:
+		# エラーが出ないように辞書の範囲内に収める
 		thousands_separator = 10
 	
 	# 桁表示文字を加える(必要な場合)※10段階まで
 	if thousands_separator > 0:
-		# 切り捨てを行う
-		num_conv = _num / (1000 * thousands_separator)
+		# 回数分の切り捨てを行う
+		num_conv = _num / (pow(1000, thousands_separator))
 		
-		print(str(thousands_separator),"num_conv:", str(num_conv)) # debug
+		# 計算結果に単位を追加
+		num_conv_str = ("%5.4f" % num_conv) + Grobal.ThousandsSparatorUnit[thousands_separator]
 		
-		if thousands_separator > 10:
-			thousands_separator = 10
-		
-		num_conv_str = str(num_conv) + Grobal.ThousandsSparatorUnit[thousands_separator]
 		return num_conv_str
 		
-	else:
+	else: # 数字が少なかったらそのまま表示
 		return _num
+
 

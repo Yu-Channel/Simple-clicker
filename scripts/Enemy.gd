@@ -31,7 +31,7 @@ func _process(delta):
 # クリックしたときの処理
 func _on_Enemy_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton:
-		if event.is_pressed():
+		if event.is_action_pressed("action_mouse"):
 			Grobal.enemy_hp -= Grobal.click_power
 			
 			enemy_shake_time = 30
