@@ -1,0 +1,84 @@
+{
+  "settings": {
+    "show_details_preview": true
+  },
+  "categories": [
+    {
+      "title": "Task",
+      "color": "6495ed"
+    }
+  ],
+  "columns": [
+    {
+      "stages": [
+        0
+      ]
+    },
+    {
+      "stages": [
+        1
+      ]
+    },
+    {
+      "stages": [
+        2
+      ]
+    }
+  ],
+  "stages": [
+    {
+      "title": "Todo",
+      "tasks": [
+        5,
+        1,
+        0
+      ]
+    },
+    {
+      "title": "Doing",
+      "tasks": [
+
+      ]
+    },
+    {
+      "title": "Done",
+      "tasks": [
+        4,
+        2,
+        3
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "category": 0,
+      "title": "転生機能の追加",
+      "details": ""
+    },
+    {
+      "category": 0,
+      "title": "敵(ボス)の画像を追加",
+      "details": ""
+    },
+    {
+      "category": 0,
+      "title": "ファームモードを追加",
+      "details": ""
+    },
+    {
+      "category": 0,
+      "title": "3桁カンマ区切り(バグ修正)",
+      "details": ""
+    },
+    {
+      "category": 0,
+      "title": "タイマー(HUD)",
+      "details": ""
+    },
+    {
+      "category": 0,
+      "title": "ボスタイマーの画像追加",
+      "details": ""
+    }
+  ]
+}
