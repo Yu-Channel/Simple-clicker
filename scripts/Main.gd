@@ -2,6 +2,7 @@ extends Node2D
 
 onready var enemy_node = $Enemy
 onready var enemy_cooldown = $Enemy/EnemyCooldown
+
 onready var hp_label = $GUI/EnemyHP/HpNumLabel
 onready var hp_bar = $GUI/EnemyHP/HpBar
 onready var hp_bar_stylebox = $GUI/EnemyHP/HpBar.get("custom_styles/fg")
@@ -9,9 +10,13 @@ onready var power_button = $GUI/ButtonUI/VBox/PowerButton
 onready var power_button_label = $GUI/ButtonUI/VBox/PowerButtonLabel
 onready var auto_power_button = $GUI/ButtonUI/VBox/AutoPowerButton
 onready var auto_power_button_label = $GUI/ButtonUI/VBox/AutoPowerButtonLabel
+onready var farm_mode = $GUI/FarmModeCheckBox
+
 onready var hud_timer_bar = $HUD/TimerBar
 onready var hud_iimer_label = $HUD/TimerBar/Label
-onready var farm_mode = $GUI/FarmModeCheckBox
+onready var hud_floor_label = $HUD/FloorLabel
+onready var hud_money_label = $HUD/MoneyLabel
+onready var hud_number_label = $HUD/MoneyNumberLabel
 
 enum ThousandsSparatorUnit { null, K, M, G, T, P, E, Z, Y, R, Q }
 
@@ -24,9 +29,14 @@ var frame60:float
 func _ready():
 	## debug log ##
 	
+	load_file()
 	# タイマーの準備 と 敵の呼び出し
 	enemy_cooldown.connect("timeout", self, "_on_EnemyCooldown_timeout")
 	call_enemy()
+	
+	hud_floor_label.text = str(Grobal.floor_num) + "F"
+	
+
 
 # フレームごとの処理===================
 func _process(_delta):
@@ -46,6 +56,9 @@ func _process(_delta):
 	
 	# お買い物の自動更新
 	shop_price()
+	
+	# お金のラベルを更新
+	hud_number_label.text = (str(unit_conversion(Grobal.money)))
 	
 	# オートクリックの判定
 	if !(frame60) && (Grobal.enemy_hp > 0):
@@ -90,8 +103,10 @@ func _on_Enemy_tree_exited():
 		
 	elif Grobal.enemy_hp <= 0:
 			Grobal.floor_num += 1
-		
-
+	
+	hud_floor_label.text = str(Grobal.floor_num) + "F"
+	
+	
 func _on_EnemyCooldown_timeout():
 	call_enemy()
 
@@ -145,10 +160,9 @@ func shop_price():
 # 3桁カンマ区切りの関数
 func unit_conversion(_num):
 	var digit:int = 0	# 桁数
-	var thousands_separator:float = 0	# 3桁区切りの回数
+	var thousands_separator = 0	# 3桁区切りの回数
 	var num_conv = 0
 	var num_conv_str
-	var digit_v = 0
 	
 	# 数字が何桁(digit)あるか数える
 	var _i = _num
@@ -158,7 +172,7 @@ func unit_conversion(_num):
 	
 	# 3桁カンマで何個あるかを調べる
 	# 結果に -1 しているのは表示が小数点になってしまうため
-	thousands_separator = int(digit / 3) - 1
+	thousands_separator = round(digit / 3) - 1
 	
 	# 10単位以上は単位自体が存在しないため切り捨て
 	# 単位は10種類["dummy", "K", "M", "G", "T", "P", "E", "Z", "Y", "R", "Q"]
@@ -179,4 +193,53 @@ func unit_conversion(_num):
 	else: # 数字が少なかったらそのまま表示
 		return _num
 
-
+# 終了時の処理
+func _notification(what):
+	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
+		print("Quit")
+		save_file()
+	
+func save_file():
+	# セーブファイルの書き込みの準備
+	var save_init = {
+		"Money": str(Grobal.money),
+		"Floor": str(Grobal.floor_num),
+		"Farm_mode_flag": str(Grobal.farm_mode_flag),
+		"Click_power": str(Grobal.click_power),
+		"Auto_click_power": str(Grobal.auto_click_power)
+	}
+	
+	# JSONテキストに変換
+	var save_data = JSON.print(save_init, "\t")
+	
+	# セーブデータの書き込み処理
+	var _save_file = File.new()
+	_save_file.open(Grobal.SAVEFILE, File.WRITE)
+	_save_file.store_string(save_data)
+	_save_file.close()
+	
+func load_file():
+	var _load_file = File.new()
+	if _load_file.file_exists(Grobal.SAVEFILE):
+		# セーブファイルが存在する場合
+		_load_file.open(Grobal.SAVEFILE, File.READ)
+		var load_conv = _load_file.get_as_text()
+		# JSONテキストを変換
+		var err = JSON.parse(load_conv)
+		if err.error == OK:
+			# 正常に変換できた場合
+			# 読み込みの処理
+			Grobal.money = err.result["Money"]
+			Grobal.floor_num = err.result["Floor"]
+#			print(str(err.result["Farm_mode_flag"]))
+#			if err.result["Farm_mode_flag"] == 1:
+#				farm_mode.pressed = true
+			Grobal.click_power = err.result["Click_power"]
+			Grobal.auto_click_power = err.result["Auto_click_power"]
+			
+		else:
+			# 失敗したらセーブデータを作成
+			pass
+	else:
+		# 存在しない場合はセーブデータを作成
+		pass

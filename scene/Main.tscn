@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://rounded-mplus-1m-medium.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://scripts/Main.gd" type="Script" id=3]
@@ -60,6 +60,21 @@ outline_size = 2
 outline_color = Color( 0.101961, 0.101961, 0.101961, 1 )
 font_data = ExtResource( 2 )
 
+[sub_resource type="DynamicFont" id=9]
+size = 36
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=10]
+size = 24
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=11]
+size = 21
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=12]
+font_data = ExtResource( 2 )
+
 [node name="Main" type="Node2D"]
 script = ExtResource( 3 )
 
@@ -84,15 +99,12 @@ __meta__ = {
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
-__meta__ = {
-"_edit_lock_": true
-}
 
 [node name="HpBar" type="ProgressBar" parent="GUI/EnemyHP"]
-margin_left = 135.0
-margin_top = 1.0
-margin_right = 385.0
-margin_bottom = 36.0
+margin_left = 137.0
+margin_top = 36.0
+margin_right = 387.0
+margin_bottom = 71.0
 custom_styles/fg = SubResource( 4 )
 value = 50.0
 percent_visible = false
@@ -102,10 +114,10 @@ anchor_left = 0.655
 anchor_top = 0.045
 anchor_right = 0.655
 anchor_bottom = 0.045
-margin_left = -30.0
-margin_top = -18.0
-margin_right = 30.0
-margin_bottom = 18.0
+margin_left = -117.0
+margin_top = 17.0
+margin_right = 121.0
+margin_bottom = 53.0
 custom_fonts/font = SubResource( 3 )
 text = "00/00"
 align = 1
@@ -159,14 +171,15 @@ align = 1
 valign = 1
 
 [node name="FarmModeCheckBox" type="CheckBox" parent="GUI"]
-margin_left = 8.0
-margin_top = 63.0
-margin_right = 127.0
-margin_bottom = 90.0
+margin_left = 10.0
+margin_top = 238.0
+margin_right = 142.0
+margin_bottom = 265.0
 custom_fonts/font = SubResource( 8 )
-text = "ファームモード"
+text = "ボス前周回モード"
 
 [node name="Test_label" type="Label" parent="."]
+visible = false
 margin_left = 18.0
 margin_top = 99.0
 margin_right = 108.0
@@ -202,6 +215,7 @@ custom_styles/fg = SubResource( 6 )
 value = 50.0
 percent_visible = false
 __meta__ = {
+"_edit_group_": true,
 "_edit_lock_": true
 }
 
@@ -215,9 +229,47 @@ text = "30.0s"
 align = 1
 
 [node name="FloorLabel" type="Label" parent="HUD"]
-margin_right = 40.0
-margin_bottom = 14.0
+margin_left = 9.0
+margin_top = 11.0
+margin_right = 130.0
+margin_bottom = 62.0
+custom_fonts/font = SubResource( 9 )
 text = "0F"
+align = 1
+clip_text = true
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="MoneyLabel" type="Label" parent="HUD"]
+margin_left = 137.0
+margin_top = 1.0
+margin_right = 197.0
+margin_bottom = 35.0
+custom_colors/font_color = Color( 0.870588, 1, 0.117647, 1 )
+custom_fonts/font = SubResource( 10 )
+text = "Money:"
+align = 1
+
+[node name="MoneyNumberLabel" type="Label" parent="HUD"]
+margin_left = 217.0
+margin_top = 4.0
+margin_right = 364.0
+margin_bottom = 34.0
+custom_fonts/font = SubResource( 11 )
+text = "money"
+align = 1
+valign = 1
+
+[node name="MoneyUnitLabel" type="Label" parent="HUD"]
+margin_left = 363.0
+margin_top = 10.0
+margin_right = 399.0
+margin_bottom = 40.0
+custom_fonts/font = SubResource( 12 )
+text = "YEN"
+align = 1
+valign = 1
 
 [connection signal="pressed" from="GUI/ButtonUI/VBox/PowerButton" to="." method="_on_PowerButton_pressed"]
 [connection signal="pressed" from="GUI/ButtonUI/VBox/AutoPowerButton" to="." method="_on_AutoPowerButton_pressed"]

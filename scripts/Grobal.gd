@@ -8,6 +8,16 @@ const AUTO_CLICK_POWER_INIT = 0	# オートの初期攻撃力
 
 var ThousandsSparatorUnit:Array = ["dummy", "K", "M", "G", "T", "P", "E", "Z", "Y", "R", "Q"]
 
+const SAVEFILE = "res://savedata.hage"
+# セーブファイルの初期化用
+var save_init = {
+	"Money": "",
+	"Floor": "",
+	"Farm_mode_flag": "",
+	"Click_power": "",
+	"Auto_click_power": ""
+}
+
 # グローバル変数
 ## ゲーム
 var money:int = 0				# お金
