@@ -167,7 +167,7 @@ func call_enemy():
 func shop_price_calc():
 	# 各種お値段の計算
 	click_power_price = int(100 * (pow(Grobal.click_power, 1.32)))
-	auto_click_power_price = int(500 * (pow(1 + Grobal.auto_click_power, 1.48)))
+	auto_click_power_price = int(320 * (pow(1 + Grobal.auto_click_power, 1.48)))
 	
 	# ボタンとラベルの表示の変更
 	power_button.text = "Power +" + str(1) + "(" + str(Grobal.click_power) + ")"
