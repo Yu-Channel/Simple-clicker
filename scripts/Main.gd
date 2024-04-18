@@ -1,42 +1,45 @@
 extends Node2D
 
-# <コーディング検索項目>==============================================
+# <コーディング検索項目>============================================================
 # debug: デバッグ用コード部分(最終的に削除する)
 # Section: 区切り
-# ================================================================
+# ==============================================================================
 
-# Section: ノードの読み込み準備
-# Enemy 関連のノード
+# ==============================================================================
+# Section: ノードの読み込み準備 =====================================================
+# Enemy 関連のノード --------------------------------------------------------------
 onready var enemy_node = $Enemy
 onready var enemy_cooldown = $Enemy/EnemyCooldown
-# GUI 関連のノード
+# GUI 関連のノード ----------------------------------------------------------------
 onready var hp_label = $GUI/EnemyHP/HpNumLabel
 onready var hp_bar = $GUI/EnemyHP/HpBar
 onready var hp_bar_stylebox = $GUI/EnemyHP/HpBar.get("custom_styles/fg")
 onready var power_button = $GUI/ButtonUI/VBox/HBoxPower/PowerButton
 onready var power_button_label = $GUI/ButtonUI/VBox/HBoxPower/PowerButtonLabel
-onready var power_button_x10 = $GUI/ButtonUI/VBox/HBoxPower/PowerButtonX10
-onready var power_button_x100 = $GUI/ButtonUI/VBox/HBoxPower/PowerButtonX100
-onready var auto_power_button = $GUI/ButtonUI/VBox/AutoPowerButton
-onready var auto_power_button_label = $GUI/ButtonUI/VBox/AutoPowerButtonLabel
+#onready var power_button_x10 = $GUI/ButtonUI/VBox/HBoxPower/PowerButtonX10 # Notused
+#onready var power_button_x100 = $GUI/ButtonUI/VBox/HBoxPower/PowerButtonX100 # Notused
+onready var auto_power_button = $GUI/ButtonUI/VBox/HBoxAutoPower/AutoPowerButton
+#onready var auto_power_button_x10 = $GUI/ButtonUI/VBox/HBoxAutoPower/AutoPowerButtonX10 # Notused
+#onready var auto_power_button_x100 = $GUI/ButtonUI/VBox/HBoxAutoPower/AutoPowerButtonX100 # Notused
+onready var auto_power_button_label = $GUI/ButtonUI/VBox/HBoxAutoPower/AutoPowerButtonLabel
 onready var farm_mode = $GUI/FarmModeCheckBox
-# HUD 関連のノード
+# HUD 関連のノード ----------------------------------------------------------------
 onready var hud_timer_bar = $HUD/TimerBar
 onready var hud_iimer_label = $HUD/TimerBar/Label
 onready var hud_floor_label = $HUD/FloorLabel
 onready var hud_money_label = $HUD/MoneyLabel
 onready var hud_number_label = $HUD/MoneyNumberLabel
 
-# ================================================================
-# Section: 全体で使用する変数宣言 =====================================
+# ==============================================================================
+# Section: 全体で使用する変数宣言 ===================================================
 var enemy_add_node
 var enemy_timer_node
 var click_power_price:float
 var auto_click_power_price:float
 var frame60:float
 
-# ================================================================
-# Section: 起動時の準備 =============================================
+# ==============================================================================
+# Section: 起動時の準備 ===========================================================
 func _ready():
 	## debug log ##
 	
@@ -47,8 +50,8 @@ func _ready():
 	
 	hud_floor_label.text = str(Grobal.floor_num) + "F"
 	
-# ================================================================
-# Section 1フレームごとの処理(1/60fps) ===============================
+# ==============================================================================
+# Section 1フレームごとの処理(1/60fps) =============================================
 func _process(_delta):
 	# フレームの計測(60fps)
 	frame60 += 1
@@ -65,7 +68,7 @@ func _process(_delta):
 	hud_iimer_label.text = "%.2fs" % [Grobal.time_limit]
 	
 	# お買い物の自動更新
-	shop_price()
+	shop_price_calc()
 	
 	# お金のラベルを更新
 	hud_number_label.text = (str(unit_conversion(Grobal.money)))
@@ -74,8 +77,8 @@ func _process(_delta):
 	if !(frame60) && (Grobal.enemy_hp > 0):
 		Grobal.enemy_hp -= Grobal.auto_click_power
 
-# ================================================================
-# Section: シグナル関連 =============================================
+# ==============================================================================
+# Section: シグナル関連 ===========================================================
 ## 敵を倒したときの処理
 func _on_Enemy_tree_exited():
 	# 敵が再表示されるまでの時間
@@ -119,36 +122,31 @@ func _on_Enemy_input_event(_viewport, event, _shape_idx):
 			
 			add_child(click_particles_node)
 
-# ================================================================
-# Section: GUI Button ============================================
+# ==============================================================================
+# Section: GUI Button ==========================================================
 # ボタンを押したときの処理
+# PowerButton 関係 --------------------------------------------------------------
 func _on_PowerButton_pressed():
-	# お金が足りてるかどうか
-	shop_price()
-	if click_power_price <= Grobal.money:
-		# お金の消費
-		Grobal.money -= int(click_power_price)
-		# プレイヤーの強化
-		Grobal.click_power += 1
-
-func _on_AutoPowerButton_pressed():
-	# お金が足りてるかどうか
-	shop_price()
-	if auto_click_power_price <= Grobal.money:
-		# お金の消費
-		Grobal.money -= int(auto_click_power_price)
-		# プレイヤーの強化
-		Grobal.auto_click_power += 1
+	shop_buy("ClickPower", 1)
 
 func _on_PowerButtonX10_pressed():
-	pass # Replace with function body.
-
+	shop_buy("ClickPower", 10)
 
 func _on_PowerButtonX100_pressed():
-	pass # Replace with function body.
+	shop_buy("ClickPower", 100)
 
-# ================================================================
-# Section: 汎用関数 ================================================
+# AutoPowerButton 関係 ----------------------------------------------------------
+func _on_AutoPowerButton_pressed():
+	shop_buy("AutoClickPower", 1)
+
+func _on_AutoPowerButtonX10_pressed():
+	shop_buy("AutoClickPower", 10)
+
+func _on_AutoPowerButtonX100_pressed():
+	shop_buy("AutoClickPower", 100)
+
+# ==============================================================================
+# Section: 汎用関数 ==============================================================
 # 敵の呼び出し 座標の設定----------------------------------------
 func call_enemy():
 	enemy_add_node = load("res://scene/Enemy.tscn").instance()
@@ -165,9 +163,9 @@ func call_enemy():
 		_:
 			hud_timer_bar.hide()
 	
-# 各お買い物の計算と表示の更新
-func shop_price():
-	# 各種お値段の計算 -------------------------------
+# 各お買い物の計算と表示の更新 =======================================================
+func shop_price_calc():
+	# 各種お値段の計算
 	click_power_price = int(100 * (pow(Grobal.click_power, 1.32)))
 	auto_click_power_price = int(500 * (pow(1 + Grobal.auto_click_power, 1.48)))
 	
@@ -177,7 +175,28 @@ func shop_price():
 	auto_power_button.text = "AutoPower +" + str(1) + "(" + str(Grobal.auto_click_power) + ")"
 	auto_power_button_label.text = "Money x" + str(unit_conversion(auto_click_power_price))
 
-# 3桁カンマ区切りの関数 -------------------------------
+# 購入の処理 =====================================================================
+func shop_buy(_type, _loop):
+	for _i in range(_loop):
+		shop_price_calc()
+		match _type:
+			"ClickPower":
+				if click_power_price <= Grobal.money:
+					# お金の消費
+					Grobal.money -= int(click_power_price)
+					# プレイヤーの強化
+					Grobal.click_power += 1
+			"AutoClickPower":
+				if auto_click_power_price <= Grobal.money:
+					# お金の消費
+					Grobal.money -= int(auto_click_power_price)
+					# プレイヤーの強化
+					Grobal.auto_click_power += 1
+			_: # bug回避用
+				pass
+	
+
+# 3桁カンマ区切りの関数 ============================================================
 func unit_conversion(_num):
 	var digit:int = 0	# 桁数
 	var thousands_separator = 0	# 3桁区切りの回数
@@ -213,9 +232,9 @@ func unit_conversion(_num):
 	else: # 数字が少なかったらそのまま表示
 		return _num
 
-# ================================================================
+# ==============================================================================
 # Section: ファイルの読み書き
-# セーブ ----------------------------------------------------------
+# セーブ ------------------------------------------------------------------------
 func save_file():
 	# セーブファイルの書き込みの準備
 	var save_init = {
@@ -235,7 +254,7 @@ func save_file():
 	_save_file.store_string(save_data)
 	_save_file.close()
 	
-# ロード -----------------------------------------------------------
+# ロード ------------------------------------------------------------------------
 func load_file():
 	var _load_file = File.new()
 	if _load_file.file_exists(Grobal.SAVEFILE):
@@ -262,11 +281,14 @@ func load_file():
 		# 存在しない場合はセーブデータを作成
 		pass
 
-# ================================================================
-# Section: 特殊イベントの処理 ========================================
+# ==============================================================================
+# Section: 特殊イベントの処理 ======================================================
 # 終了時の処理
 func _notification(what):
 	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
 		print("Quit")
 		save_file()
+
+
+
 
