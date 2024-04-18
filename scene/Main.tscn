@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://rounded-mplus-1m-medium.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://scripts/Main.gd" type="Script" id=3]
@@ -20,6 +20,14 @@ corner_radius_bottom_left = 5
 size = 24
 outline_size = 1
 outline_color = Color( 0.0784314, 0.0784314, 0.0784314, 1 )
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=13]
+size = 13
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=14]
+size = 13
 font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=5]
@@ -126,49 +134,72 @@ valign = 1
 [node name="ButtonUI" type="PanelContainer" parent="GUI"]
 margin_left = 17.0
 margin_top = 289.0
-margin_right = 388.0
-margin_bottom = 399.0
+margin_right = 390.0
+margin_bottom = 409.0
 __meta__ = {
-"_edit_group_": true,
 "_editor_description_": "button用のノード"
 }
 
 [node name="VBox" type="VBoxContainer" parent="GUI/ButtonUI"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 364.0
-margin_bottom = 103.0
+margin_right = 366.0
+margin_bottom = 113.0
 
-[node name="PowerButton" type="Button" parent="GUI/ButtonUI/VBox"]
-margin_right = 357.0
+[node name="HBoxPower" type="HBoxContainer" parent="GUI/ButtonUI/VBox"]
+margin_right = 359.0
+margin_bottom = 25.0
+
+[node name="PowerButtonX10" type="Button" parent="GUI/ButtonUI/VBox/HBoxPower"]
+margin_right = 40.0
+margin_bottom = 25.0
+custom_fonts/font = SubResource( 13 )
+text = "x100"
+
+[node name="PowerButtonX100" type="Button" parent="GUI/ButtonUI/VBox/HBoxPower"]
+margin_left = 44.0
+margin_right = 77.0
+margin_bottom = 25.0
+custom_fonts/font = SubResource( 14 )
+text = "x10"
+
+[node name="PowerButton" type="Button" parent="GUI/ButtonUI/VBox/HBoxPower"]
+margin_left = 81.0
+margin_right = 157.0
 margin_bottom = 25.0
 custom_fonts/font = SubResource( 5 )
 text = "Power(x)"
 
-[node name="PowerButtonLabel" type="Label" parent="GUI/ButtonUI/VBox"]
+[node name="PowerButtonLabel" type="Label" parent="GUI/ButtonUI/VBox/HBoxPower"]
+margin_left = 161.0
+margin_top = 4.0
+margin_right = 241.0
+margin_bottom = 21.0
+custom_fonts/font = SubResource( 1 )
+text = "Money x100"
+align = 1
+valign = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GUI/ButtonUI/VBox"]
 margin_top = 29.0
-margin_right = 357.0
-margin_bottom = 46.0
+margin_right = 359.0
+margin_bottom = 29.0
+
+[node name="AutoPowerButtonLabel" type="Label" parent="GUI/ButtonUI/VBox"]
+margin_top = 33.0
+margin_right = 359.0
+margin_bottom = 50.0
 custom_fonts/font = SubResource( 1 )
 text = "Money x100"
 align = 1
 valign = 1
 
 [node name="AutoPowerButton" type="Button" parent="GUI/ButtonUI/VBox"]
-margin_top = 50.0
-margin_right = 357.0
-margin_bottom = 75.0
+margin_top = 54.0
+margin_right = 359.0
+margin_bottom = 79.0
 custom_fonts/font = SubResource( 5 )
 text = "AutoPower(x)"
-
-[node name="AutoPowerButtonLabel" type="Label" parent="GUI/ButtonUI/VBox"]
-margin_top = 79.0
-margin_right = 357.0
-margin_bottom = 96.0
-custom_fonts/font = SubResource( 1 )
-text = "Money x100"
-align = 1
-valign = 1
 
 [node name="FarmModeCheckBox" type="CheckBox" parent="GUI"]
 margin_left = 10.0
@@ -271,5 +302,7 @@ text = "YEN"
 align = 1
 valign = 1
 
-[connection signal="pressed" from="GUI/ButtonUI/VBox/PowerButton" to="." method="_on_PowerButton_pressed"]
+[connection signal="pressed" from="GUI/ButtonUI/VBox/HBoxPower/PowerButtonX10" to="." method="_on_PowerButtonX10_pressed"]
+[connection signal="pressed" from="GUI/ButtonUI/VBox/HBoxPower/PowerButtonX100" to="." method="_on_PowerButtonX100_pressed"]
+[connection signal="pressed" from="GUI/ButtonUI/VBox/HBoxPower/PowerButton" to="." method="_on_PowerButton_pressed"]
 [connection signal="pressed" from="GUI/ButtonUI/VBox/AutoPowerButton" to="." method="_on_AutoPowerButton_pressed"]
