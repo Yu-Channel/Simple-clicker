@@ -30,8 +30,10 @@
       "title": "Todo",
       "tasks": [
         5,
+        6,
         1,
-        0
+        0,
+        7
       ]
     },
     {
@@ -78,6 +80,16 @@
     {
       "category": 0,
       "title": "ボスタイマーの画像追加",
+      "details": ""
+    },
+    {
+      "category": 0,
+      "title": "お金のアイコンを追加",
+      "details": ""
+    },
+    {
+      "category": 0,
+      "title": "購入ボタンにx回購入ボタンを増設",
       "details": ""
     }
   ]
