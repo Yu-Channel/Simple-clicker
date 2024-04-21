@@ -73,7 +73,7 @@ func set_enemy_hp():
 		enemy_hp *= 1 + (pow(float(Grobal.floor_num) / 10, 2) * 0.1)
 		Grobal.time_limit = Grobal.LIMIT_TIMER_NUM
 	else: # 雑魚用のHPを設定
-		enemy_hp *= 1 + (pow(float(Grobal.floor_num) / 10, 2) * 0.0015)
+		enemy_hp *= 1 + (pow(float(Grobal.floor_num) / 10, 2) * 0.0013)
 	
 	# 最大HPを代入 (intで少数点以下を切る)
 	Grobal.enemy_max_hp = int(enemy_hp)
@@ -84,6 +84,6 @@ func set_enemy_hp():
 func loot_money():
 	var money:float = 0
 	# 設定の調整の必要性あり。v1.2=1.28
-	money = 10 * (1 + pow(Grobal.floor_num, 1.43) * 0.2 * Grobal.floor_num)
+	money = 10 * (1 + pow(Grobal.floor_num, 1.62) * 0.2 * Grobal.floor_num)
 	Grobal.money += int(money)
 	
