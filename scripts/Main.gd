@@ -7,6 +7,8 @@ extends Node2D
 
 # ==============================================================================
 # Section: ノードの読み込み準備 =====================================================
+# System 関連のノード -------------------------------------------------------------
+onready var background_node = $GUI/BackGround
 # Enemy 関連のノード --------------------------------------------------------------
 onready var enemy_node = $Enemy
 onready var enemy_cooldown = $Enemy/EnemyCooldown
@@ -43,7 +45,10 @@ var frame60:float
 func _ready():
 	## debug log ##
 	
+	# セーブデータを読み込み
 	load_file()
+	# 背景の読み込み
+	load_background()
 	# タイマーの準備 と 敵の呼び出し
 	enemy_cooldown.connect("timeout", self, "_on_EnemyCooldown_timeout")
 	call_enemy()
@@ -193,6 +198,7 @@ func shop_buy(_type, _loop):
 					# プレイヤーの強化
 					Grobal.auto_click_power += 1
 			_: # bug回避用
+				print("Debug: func shop_buy(): match: default: pass through")
 				pass
 	
 
@@ -231,6 +237,13 @@ func unit_conversion(_num):
 		
 	else: # 数字が少なかったらそのまま表示
 		return _num
+
+# 背景の読み込み ==================================================================
+func load_background():
+	var background_add_node = load("res://scene/Background.tscn").instance()	
+	background_add_node.position.x = 200
+	background_add_node.position.y = 200
+	background_node.add_child(background_add_node)
 
 # ==============================================================================
 # Section: ファイルの読み書き

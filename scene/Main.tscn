@@ -101,6 +101,7 @@ __meta__ = {
 [node name="BackGround" type="Control" parent="GUI"]
 margin_right = 40.0
 margin_bottom = 40.0
+mouse_filter = 2
 
 [node name="BackGroundRect" type="ColorRect" parent="GUI/BackGround"]
 margin_right = 400.0
@@ -244,6 +245,9 @@ script = ExtResource( 5 )
 margin_right = 40.0
 margin_bottom = 40.0
 mouse_filter = 2
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="EnemyCooldown" type="Timer" parent="Enemy"]
 process_mode = 0
