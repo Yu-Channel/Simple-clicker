@@ -51,4 +51,5 @@ process_material = SubResource( 1 )
 script = ExtResource( 1 )
 
 [node name="ParticlesTimer" type="Timer" parent="."]
-one_shot = true
+
+[connection signal="timeout" from="ParticlesTimer" to="." method="_on_ParticlesTimer_timeout"]
