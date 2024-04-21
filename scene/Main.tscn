@@ -98,7 +98,11 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="BackGround" type="ColorRect" parent="GUI"]
+[node name="BackGround" type="Control" parent="GUI"]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="BackGroundRect" type="ColorRect" parent="GUI/BackGround"]
 margin_right = 400.0
 margin_bottom = 400.0
 mouse_filter = 2
