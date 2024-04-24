@@ -9,6 +9,7 @@ const AUTO_CLICK_POWER_INIT = 0	# オートの初期攻撃力
 var ThousandsSparatorUnit:Array = ["dummy", "K", "M", "G", "T", "P", "E", "Z", "Y", "R", "Q"]
 
 const SAVEFILE = "res://savedata.hage"
+
 # セーブファイルの初期化用
 var save_init = {
 	"Money": "",
@@ -19,6 +20,10 @@ var save_init = {
 }
 
 # グローバル変数
+## システム
+var file_version
+var product_version
+
 ## ゲーム
 var money:int = 0				# お金
 var floor_num:int = 1				# 階層

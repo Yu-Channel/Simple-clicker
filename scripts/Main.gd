@@ -46,8 +46,11 @@ var frame60:float
 func _ready():
 	## debug log ##
 	
+	# 初期化
+	init_app()
 	# セーブデータを読み込み
-	load_file()
+#	load_file()
+	old_load_file()
 	# 背景の読み込み
 	load_background()
 	# タイマーの準備 と 敵の呼び出し
@@ -255,6 +258,19 @@ func load_background():
 	background_node.add_child(background_add_node)
 
 # ==============================================================================
+# Section: 初期化処理関連
+# ファイルバージョンの取得 ==========================================================
+func init_app():
+	var _cfg = ConfigFile.new()
+	var err = _cfg.load("res://export_presets.cfg")
+	if err == OK:
+		Grobal.file_version = _cfg.get_value("preset.0.options", 'application/file_version')
+		Grobal.product_version = _cfg.get_value("preset.0.options", 'application/product_version')
+		
+		print(Grobal.file_version)
+		print(Grobal.product_version)
+
+# ==============================================================================
 # Section: ファイルの読み書き
 # セーブ ------------------------------------------------------------------------
 func save_file():
@@ -268,6 +284,8 @@ func save_file():
 	_save_file.set_value("save", "click_power", Grobal.click_power)
 	_save_file.set_value("save", "auto_click_power", Grobal.auto_click_power)
 	
+	_save_file.set_value("system", "version", Grobal.file_version)
+	
 	# セーブデータのファイルの生成と書き込み
 	_save_file.save_encrypted_pass(Grobal.SAVEFILE, Grobal.PASSWORD)
 
@@ -277,7 +295,6 @@ func load_file():
 	
 	# Config ファイルを読み込む
 	var ret = _save_file.load_encrypted_pass(Grobal.SAVEFILE, Grobal.PASSWORD)
-	print("load:ret=", str(ret)) # debug
 	if ret != OK:
 		print("file load error.")
 		return # 読み込みに失敗
@@ -309,32 +326,33 @@ func load_file():
 #	_save_file.store_string(save_data)
 #	_save_file.close()
 #
-## ロード ------------------------------------------------------------------------
-#func old_load_file():
-#	var _load_file = File.new()
-#	if _load_file.file_exists(Grobal.SAVEFILE):
-#		# セーブファイルが存在する場合
-#		_load_file.open(Grobal.SAVEFILE, File.READ)
-#		var load_conv = _load_file.get_as_text()
-#		# JSONテキストを変換
-#		var err = JSON.parse(load_conv)
-#		if err.error == OK:
-#			# 正常に変換できた場合
-#			# 読み込みの処理
-#			Grobal.money = err.result["Money"]
-#			Grobal.floor_num = err.result["Floor"]
-##			print(str(err.result["Farm_mode_flag"]))
-##			if err.result["Farm_mode_flag"] == 1:
-##				farm_mode.pressed = true
-#			Grobal.click_power = err.result["Click_power"]
-#			Grobal.auto_click_power = err.result["Auto_click_power"]
-#
-#		else:
-#			# 失敗したらセーブデータを作成
-#			pass
-#	else:
-#		# 存在しない場合はセーブデータを作成
-#		pass
+# ロード ------------------------------------------------------------------------
+func old_load_file():
+	var _load_file = File.new()
+	if _load_file.file_exists(Grobal.SAVEFILE):
+		# セーブファイルが存在する場合
+		_load_file.open(Grobal.SAVEFILE, File.READ)
+		var load_conv = _load_file.get_as_text()
+		# JSONテキストを変換
+		var err = JSON.parse(load_conv)
+		if err.error == OK:
+			# 正常に変換できた場合
+			# 読み込みの処理
+			Grobal.money = err.result["Money"]
+			Grobal.floor_num = err.result["Floor"]
+#			print(str(err.result["Farm_mode_flag"]))
+#			if err.result["Farm_mode_flag"] == 1:
+#				farm_mode.pressed = true
+			Grobal.click_power = err.result["Click_power"]
+			Grobal.auto_click_power = err.result["Auto_click_power"]
+
+		else:
+			# 失敗したらセーブデータを作成
+			print("旧セーブデータ読み込み失敗")
+			load_file()
+	else:
+		# 存在しない場合はセーブデータを作成
+		pass
 
 # ==============================================================================
 # Section: 特殊イベントの処理 ======================================================
