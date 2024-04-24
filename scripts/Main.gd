@@ -12,6 +12,7 @@ onready var background_node = $GUI/BackGround
 # Enemy 関連のノード --------------------------------------------------------------
 onready var enemy_node = $Enemy
 onready var enemy_cooldown = $Enemy/EnemyCooldown
+#onready var enemy_explode = $
 # GUI 関連のノード ----------------------------------------------------------------
 onready var hp_label = $GUI/EnemyHP/HpNumLabel
 onready var hp_bar = $GUI/EnemyHP/HpBar
@@ -86,6 +87,7 @@ func _process(_delta):
 # Section: シグナル関連 ===========================================================
 ## 敵を倒したときの処理
 func _on_Enemy_tree_exited():
+	enemy_explode()
 	# 敵が再表示されるまでの時間
 	enemy_cooldown.start(0.6)
 	
@@ -168,6 +170,13 @@ func call_enemy():
 		_:
 			hud_timer_bar.hide()
 	
+# 敵を討伐したときにエフェクトを表示
+func enemy_explode():
+	var enemy_explode_add_node = load("res://scene/ExplodeParticles.tscn").instance()
+	enemy_explode_add_node.position.x = 260
+	enemy_explode_add_node.position.y = 160
+	enemy_node.add_child(enemy_explode_add_node)
+
 # 各お買い物の計算と表示の更新 =======================================================
 func shop_price_calc():
 	# 各種お値段の計算
@@ -249,50 +258,83 @@ func load_background():
 # Section: ファイルの読み書き
 # セーブ ------------------------------------------------------------------------
 func save_file():
-	# セーブファイルの書き込みの準備
-	var save_init = {
-		"Money": str(Grobal.money),
-		"Floor": str(Grobal.floor_num),
-		"Farm_mode_flag": str(Grobal.farm_mode_flag),
-		"Click_power": str(Grobal.click_power),
-		"Auto_click_power": str(Grobal.auto_click_power)
-	}
+	# ConfigFile のインスタンスを生成
+	var _save_file = ConfigFile.new()
 	
-	# JSONテキストに変換
-	var save_data = JSON.print(save_init, "\t")
+	# 保存するパラメータを設定
+	_save_file.set_value("save", "money", Grobal.money)
+	_save_file.set_value("save", "floor", Grobal.floor_num)
+	_save_file.set_value("save", "farm_mode_flag", Grobal.farm_mode_flag)
+	_save_file.set_value("save", "click_power", Grobal.click_power)
+	_save_file.set_value("save", "auto_click_power", Grobal.auto_click_power)
 	
-	# セーブデータの書き込み処理
-	var _save_file = File.new()
-	_save_file.open(Grobal.SAVEFILE, File.WRITE)
-	_save_file.store_string(save_data)
-	_save_file.close()
-	
+	# セーブデータのファイルの生成と書き込み
+	_save_file.save_encrypted_pass(Grobal.SAVEFILE, Grobal.PASSWORD)
+
 # ロード ------------------------------------------------------------------------
 func load_file():
-	var _load_file = File.new()
-	if _load_file.file_exists(Grobal.SAVEFILE):
-		# セーブファイルが存在する場合
-		_load_file.open(Grobal.SAVEFILE, File.READ)
-		var load_conv = _load_file.get_as_text()
-		# JSONテキストを変換
-		var err = JSON.parse(load_conv)
-		if err.error == OK:
-			# 正常に変換できた場合
-			# 読み込みの処理
-			Grobal.money = err.result["Money"]
-			Grobal.floor_num = err.result["Floor"]
-#			print(str(err.result["Farm_mode_flag"]))
-#			if err.result["Farm_mode_flag"] == 1:
-#				farm_mode.pressed = true
-			Grobal.click_power = err.result["Click_power"]
-			Grobal.auto_click_power = err.result["Auto_click_power"]
-			
-		else:
-			# 失敗したらセーブデータを作成
-			pass
-	else:
-		# 存在しない場合はセーブデータを作成
-		pass
+	var _save_file = ConfigFile.new()
+	
+	# Config ファイルを読み込む
+	var ret = _save_file.load_encrypted_pass(Grobal.SAVEFILE, Grobal.PASSWORD)
+	print("load:ret=", str(ret)) # debug
+	if ret != OK:
+		print("file load error.")
+		return # 読み込みに失敗
+	
+	# セクションとキーを指定して値を取得
+	Grobal.money = _save_file.get_value("save", "money")
+	Grobal.floor_num = _save_file.get_value("save", "floor")
+	Grobal.farm_mode_flag = _save_file.get_value("save", "farm_mode_flag")
+	Grobal.click_power = _save_file.get_value("save", "click_power")
+	Grobal.auto_click_power = _save_file.get_value("save", "auto_click_power")
+	
+## セーブ ------------------------------------------------------------------------
+#func old_save_file():
+#	# セーブファイルの書き込みの準備
+#	var save_init = {
+#		"Money": str(Grobal.money),
+#		"Floor": str(Grobal.floor_num),
+#		"Farm_mode_flag": str(Grobal.farm_mode_flag),
+#		"Click_power": str(Grobal.click_power),
+#		"Auto_click_power": str(Grobal.auto_click_power)
+#	}
+#
+#	# JSONテキストに変換
+#	var save_data = JSON.print(save_init, "\t")
+#
+#	# セーブデータの書き込み処理
+#	var _save_file = File.new()
+#	_save_file.open(Grobal.SAVEFILE, File.WRITE)
+#	_save_file.store_string(save_data)
+#	_save_file.close()
+#
+## ロード ------------------------------------------------------------------------
+#func old_load_file():
+#	var _load_file = File.new()
+#	if _load_file.file_exists(Grobal.SAVEFILE):
+#		# セーブファイルが存在する場合
+#		_load_file.open(Grobal.SAVEFILE, File.READ)
+#		var load_conv = _load_file.get_as_text()
+#		# JSONテキストを変換
+#		var err = JSON.parse(load_conv)
+#		if err.error == OK:
+#			# 正常に変換できた場合
+#			# 読み込みの処理
+#			Grobal.money = err.result["Money"]
+#			Grobal.floor_num = err.result["Floor"]
+##			print(str(err.result["Farm_mode_flag"]))
+##			if err.result["Farm_mode_flag"] == 1:
+##				farm_mode.pressed = true
+#			Grobal.click_power = err.result["Click_power"]
+#			Grobal.auto_click_power = err.result["Auto_click_power"]
+#
+#		else:
+#			# 失敗したらセーブデータを作成
+#			pass
+#	else:
+#		# 存在しない場合はセーブデータを作成
+#		pass
 
 # ==============================================================================
 # Section: 特殊イベントの処理 ======================================================
