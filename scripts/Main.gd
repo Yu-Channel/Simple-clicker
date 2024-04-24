@@ -90,7 +90,6 @@ func _process(_delta):
 # Section: シグナル関連 ===========================================================
 ## 敵を倒したときの処理
 func _on_Enemy_tree_exited():
-	enemy_explode()
 	# 敵が再表示されるまでの時間
 	enemy_cooldown.start(0.6)
 	
@@ -104,14 +103,19 @@ func _on_Enemy_tree_exited():
 	if Grobal.farm_mode_flag != 0:
 		# ボス前フロアだった場合
 		if (Grobal.floor_num % 10 == 9):
-			pass
+			enemy_explode()
+		# ボスが倒せなかった場合
 		elif (Grobal.floor_num % 10 == 0 and Grobal.enemy_hp > 0):
 			Grobal.floor_num -= 1
+		# 上記条件以外のとき
 		else:
 			Grobal.floor_num += 1
-		
+			enemy_explode()
+	
+	# 通常モードのとき
 	elif Grobal.enemy_hp <= 0:
 			Grobal.floor_num += 1
+			enemy_explode()
 	
 	hud_floor_label.text = str(Grobal.floor_num) + "F"
 	
