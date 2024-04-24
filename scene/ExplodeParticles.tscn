@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://scripts/ExplodeParticles.gd" type="Script" id=1]
 
@@ -8,7 +8,12 @@ _data = [ Vector2( 0, 0.572727 ), 0.0, 0.0, 0, 0, Vector2( 0.202797, 0 ), 0.0, 0
 [sub_resource type="CurveTexture" id=6]
 curve = SubResource( 7 )
 
+[sub_resource type="Curve" id=11]
+min_value = -1.0
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
+
 [sub_resource type="CurveTexture" id=9]
+curve = SubResource( 11 )
 
 [sub_resource type="Curve" id=10]
 min_value = -200.0
